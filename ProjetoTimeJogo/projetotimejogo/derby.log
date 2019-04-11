@@ -1,0 +1,33 @@
+Thu Apr 11 09:52:04 BRT 2019 : Apache Derby Servidor de Rede - 10.10.2.0 - (1582446) iniciado e pronto para aceitar conexões na porta 1527 em {3}
+----------------------------------------------------------------
+Thu Apr 11 09:52:05 BRT 2019:
+ Inicializando o Derby versão The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instância a816c00e-016a-0c74-8746-ffffc4518d8d
+no diretório de banco de dados D:\Sistema de Informação\3ºSemestre\Programação de Sistemas II\ProjetoTimeJogo\projetotimejogo\projetotimejogo 
+
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_161-b12
+user.dir=D:\Sistema de Informação\3ºSemestre\Programação de Sistemas II\ProjetoTimeJogo\glassfish4\javadb
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=D:\Sistema de Informação\3ºSemestre\Programação de Sistemas II\ProjetoTimeJogo\projetotimejogo
+Carregador de classe do banco de dados iniciado - derby.database.classpath=''
+----------------------------------------------------------------
+Thu Apr 11 09:52:16 BRT 2019:
+Encerrando a instância a816c00e-016a-0c74-8746-ffffc4518d8d
+Thu Apr 11 09:52:17 BRT 2019 Thread[DRDAConnThread_2,5,main] (DATABASE = projetotimejogo), (DRDAID = {2}), Banco de dados 'projetotimejogo' fechado.
+----------------------------------------------------------------
+Thu Apr 11 09:52:28 BRT 2019:
+ Inicializando o Derby versão The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instância 560740aa-016a-0c74-8746-ffffc4518d8d
+no diretório de banco de dados D:\Sistema de Informação\3ºSemestre\Programação de Sistemas II\ProjetoTimeJogo\projetotimejogo\projetotimejogo 
+
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_161-b12
+user.dir=D:\Sistema de Informação\3ºSemestre\Programação de Sistemas II\ProjetoTimeJogo\glassfish4\javadb
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=D:\Sistema de Informação\3ºSemestre\Programação de Sistemas II\ProjetoTimeJogo\projetotimejogo
+Carregador de classe do banco de dados iniciado - derby.database.classpath=''
+----------------------------------------------------------------
+Thu Apr 11 10:30:50 BRT 2019: Shutting down Derby engine
