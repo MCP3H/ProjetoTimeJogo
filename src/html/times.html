@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset = "UTF-8">
+	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+	<title> Times </title>
+	<link rel="stylesheet" type="text/css" href="css/index.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<script src="js/jquery.js"></script>
+  	<script src="js/jquery-ui.js"></script>
+</head>
+<body onload="abrirFormGet()">
+	<!-- titulo do site -->
+	<div class="container-fluid">
+		<div class="row fundo-titulo" onclick="location.href='index.html'">
+			<div class="col col-titulo">
+				<div id="titulo" class="titulo">
+					<h1> Campeonato Tico and Teco Corporation </h1>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col titulo-times">
+				Informações sobre os <strong>TIMES</strong> do Campeonato Tico and Teco Corporation
+			</div>
+		</div>
+		<div class="row menu-times">
+			<div class="col-sm-3">
+				<div id="getTimes" class="get-times" onclick="abrirFormGet()">
+					Visualizar Times
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div id="postTimes" class="post-times" onclick="abrirFormPost()">
+					Adicionar Time
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div id="putTimes" class="put-times" disabled> 
+					Atualizar Time
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div id="index" class="put-times" onclick="location.href='index.html'"> 
+					Voltar Menu
+				</div>
+			</div>
+		</div>
+		<div class="row formularios">
+			<div class="col">
+				<div id="formGet" class="formulario-get">
+					<form>
+						<div class="form-group">
+							<input type="text" class="form-control" id="idTimeGet" placeholder="Insira o id do time para visualizar" onkeypress='return SomenteNumero(event)'>
+							<input type="button" class="btn btn-success" onclick="getTime()" value="Visualizar" />
+						</div>
+						
+						<hr>
+						<form>
+							<div class="form-group">
+								<table style="border:1px solid">
+									<tr>
+										<th>ID</th>
+										<th>Nome</th>
+										<th>Ano</th>
+										<th>Cidade</th>
+										<th>Estado</th>
+										<th></th>
+										<th></th>
+									</tr>
+									<tbody id="times">
+									</tbody>
+								</table>
+							</div>
+						</form>
+					</form>
+				</div>
+				<div id="formPost" class="formulario-post">
+					<form>
+						<div class="form-group">
+							Nome
+							<input type="text" class="form-control" id="nomeTimeAdd">
+						</div>
+						<div class="form-group">
+							Ano
+							<input type="text" class="form-control" id="anoTimeAdd" onkeypress='return SomenteNumero(event)'>
+						</div>
+						<div class="form-group">
+							Cidade
+							<input type="text" class="form-control" id="cidadeTimeAdd">
+						</div>
+						<div class="form-group">
+							Estado
+							<input type="text" class="form-control" id="estadoTimeAdd">
+						</div>
+						<input type="button" class="btn btn-success" onclick="adicionar()" value="Adicionar" />
+						<input type="reset" class="btn btn-success" onclick="limparCampos()" value="Cancelar" />
+					</form>
+				</div>
+				<div id="formPut" class="formulario-put">
+					<form>
+						<div class="form-group">
+							Nome
+							<input type="text" class="form-control" id="nomeTime">
+						</div>
+						<div class="form-group">
+							Ano
+							<input type="text" class="form-control" id="anoTime" onkeypress='return SomenteNumero(event)'>
+						</div>
+						<div class="form-group">
+							Cidade
+							<input type="text" class="form-control" id="cidadeTime">
+						</div>
+						<div class="form-group">
+							Estado
+							<input type="text" class="form-control" id="estadoTime">
+						</div>
+						<input type="button" class="btn btn-success" onclick="atualizar()" value="Atualizar" />
+						<input type="reset" class="btn btn-success" onclick="limparCampos()" value="Cancelar" />
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col rodape">
+				Copyright © 2019 Campeonato Tico and Teco Corporation - Todos os direitos reservados. Criado e desenvolvido por TICO and TECO
+			</div>
+		</div>
+	</div>
+	<!-- menu do site -->
+</body>
+<script type="text/javascript">
+    abrirTitulo();
+	var corpoTabela = document.querySelector('#times');
+	var idTime;
+	var URL;
+	var nomeTime = document.querySelector('#nomeTime');
+	var anoTime = document.querySelector('#anoTime');
+	var cidadeTime = document.querySelector('#cidadeTime');
+	var estadoTime = document.querySelector('#estadoTime');
+	var idTimeGet = document.querySelector('#idTimeGet');
+	
+	function SomenteNumero(e){
+		var tecla=(window.event)?event.keyCode:e.which;   
+		if((tecla>47 && tecla<58)) return true;
+		else{
+			if (tecla==8 || tecla==0) return true;
+			else  return false;
+		}
+	}
+	
+	function limparCampos(){
+		nomeTime.value = '';
+		anoTime.value = '';
+		cidadeTime.value = '';
+		estadoTime.value = '';
+		abrirFormGet();
+	}
+	
+	function getTime(){
+		if (idTimeGet != null)
+			inicializar(idTimeGet.value);
+	}
+	
+	function atualizar(){
+		const ID = idTime;
+		URL = `/api/times/${ID}`;
+		const dadosTime = {
+			'nome': nomeTime.value,
+			'ano': anoTime.value,
+			'cidade': cidadeTime.value,
+			'estado': estadoTime.value
+		};
+		const putRequest = {
+			method:'PUT',
+			body: JSON.stringify(dadosTime),
+			headers: { 'Content-type': 'application/json;charset=UTF-8' }
+		};
+		try {
+			listarTimes(URL, putRequest);
+		} catch (e) {
+			corpoTabela.innerHTML = e;
+		}
+	}
+	
+	function adicionar(){
+		URL = `/api/times`;
+		const dadosTime = {
+			'nome': nomeTimeAdd.value,
+			'ano': anoTimeAdd.value,
+			'cidade': cidadeTimeAdd.value,
+			'estado': estadoTimeAdd.value
+		};
+		const putRequest = {
+			method:'POST',
+			body: JSON.stringify(dadosTime),
+			headers: { 'Content-type': 'application/json;charset=UTF-8' }
+		};
+		try {
+			listarTimes(URL, putRequest);
+		} catch (e) {
+			corpoTabela.innerHTML = e;
+		}
+	}
+	
+	function deletar(id){
+		if (confirm("Você deseja deletar este time?")) {
+			URL = `/api/times/${id}`;
+			const putRequest = {
+				method:'DELETE'
+			};
+			try {
+				listarTimes(URL, putRequest);
+			} catch (e) {
+				corpoTabela.innerHTML = e;
+			}
+		}
+	}
+        
+	function preencherTabela(times) {
+		var linhasTabela = '';
+        var n = times.length;
+		if (n == null){
+			linhasTabela += '<tr>'+
+			'<td>' + times.id + '</td>' + 
+			'<td>' + times.nome + '</td>' + 
+			'<td>' + times.ano + '</td>' + 
+			'<td>' + times.cidade+ '</td>' + 
+			'<td>' + times.estado + '</td>'+
+			'<td>' + `<i onclick="abrirFormPut('${times.id}','${times.nome}','${times.ano}','${times.cidade}','${times.estado}')" class="fas fa-edit"></i></td>`+
+			'<td>' + `<i onclick="deletar('${times.id}')" class="fas fa-trash-alt"></i></td>` +
+			
+                    '</tr>\n';
+		}else{
+			for (var i = 0; i < n; i++) {
+                    var time = times[i];
+                    linhasTabela += '<tr>'+
+			'<td>' + time.id + '</td>' + 
+			'<td>' + time.nome + '</td>' + 
+			'<td>' + time.ano + '</td>' + 
+			'<td>' + time.cidade + '</td>' + 
+			'<td>' + time.estado + '</td>'+
+			'<td>' + `<i onclick="abrirFormPut('${time.id}','${time.nome}','${time.ano}','${time.cidade}','${time.estado}')" class="fas fa-edit"></i></td>`+
+			'<td>' + `<i onclick="deletar('${time.id}')" class="fas fa-trash-alt"></i></td>` +
+                    '</tr>\n';
+                }
+		}
+		corpoTabela.innerHTML = linhasTabela;
+	}      
+	
+	async function listarTimes(url, request) {
+		try {
+			if(request != null){
+				if(request.method){
+					fetch(url, request).then(resposta => abrirFormGet());
+				}
+			}else{
+				fetch(url).then(resposta => resposta.json()).then(function(jsonResponse){
+					if (Array.isArray(jsonResponse))
+						preencherTabela(jsonResponse);
+					else
+						if (jsonResponse.cidade != null)
+							preencherTabela(jsonResponse);
+						else
+							inicializar();
+				});
+			}
+		} catch (e) {
+			corpoTabela.innerHTML = e;			
+		}
+	}
+	
+	function inicializar(valor){
+		if(valor == null){
+			url = `/api/times`;
+		}else{
+			url = `/api/times/${valor}`;
+		}
+		listarTimes(url);
+	}
+	
+	function abrirFormGet(){
+		$( "#formPut" ).hide("fade", 10);
+		$( "#formPost" ).hide("fade", 10);
+		$( "#formGetTime" ).hide("fade",10);
+
+		$( "#putTimes" ).css("background-color", "white");  
+		$( "#putTimes" ).css({'color': 'rgb(0, 30, 0)'});   
+
+		$( "#postTimes" ).css("background-color", "white");  
+		$( "#postTimes" ).css({'color': 'rgb(0, 30, 0)'});
+		
+		$( "#getTimes" ).css("background-color", "rgb(0, 30, 0)");  
+		$( "#getTimes" ).css({'color': 'white'});
+
+		$( "#formGet" ).show("fade", 800);	
+		inicializar();		
+	}
+	
+	function abrirFormPut(id,nome,ano,cidade,estado){
+		idTime = id;
+		nomeTime.value = nome;
+		anoTime.value =  parseInt(ano);
+		cidadeTime.value = cidade;
+		estadoTime.value = estado;
+		
+		$( "#formGet" ).hide("fade", 10);
+		$( "#formPost" ).hide("fade", 10);
+
+		$( "#getTimes" ).css("background-color", "white");  
+		$( "#getTimes" ).css({'color': 'rgb(0, 30, 0)'});		
+
+		$( "#postTimes" ).css("background-color", "white");  
+		$( "#postTimes" ).css({'color': 'rgb(0, 30, 0)'});
+
+		$( "#putTimes" ).css("background-color", "rgb(0, 30, 0)");  
+		$( "#putTimes" ).css({'color': 'white'});  
+
+		$( "#formPut" ).show("fade", 800);
+	}
+
+	function abrirFormPost(){
+		$( "#formGet" ).hide("fade", 10);
+		$( "#formPut" ).hide("fade", 10);
+		
+		$( "#putTimes" ).css("background-color", "white");  
+		$( "#putTimes" ).css({'color': 'rgb(0, 30, 0)'});
+
+		$( "#postTimes" ).css("background-color", "rgb(0, 30, 0)");  
+		$( "#postTimes" ).css({'color': 'white'});   
+		
+		$( "#getTimes" ).css("background-color", "white");  
+		$( "#getTimes" ).css({'color': 'rgb(0, 30, 0)'});	
+
+		$( "#formPost" ).show("fade", 800);
+	}
+	
+	function abrirTitulo(){
+		$( "#titulo" ).delay(500).show("fade", 1000);
+	}
+</script>
+</html>

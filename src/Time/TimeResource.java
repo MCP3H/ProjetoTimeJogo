@@ -2,7 +2,6 @@ package Time;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import io.dropwizard.jersey.*;
 import io.dropwizard.jersey.params.*;
 import java.util.*;
 
@@ -68,9 +67,13 @@ public class TimeResource {
 
     @PUT
     @Path("/{id}")
-    public Time update(@PathParam("id") IntParam id, Time t) {
-        Time time = new Time(t.getNome(),t.getAno(),t.getCidade(),t.getEstado());
-        return this.daotime.update(id.get(), time);
+    public Response update(@PathParam("id") IntParam id, Time t) {
+        t.setId(id.get());
+        if (this.daotime.update(t)) {
+            return Response.ok().build();
+        } else {
+            throw new WebApplicationException("Time com id = " + id.get() + " não encontrado!", 404);
+        }
     }
 //fetch('http://localhost:8080/times/4', {
 //method: 'PUT',

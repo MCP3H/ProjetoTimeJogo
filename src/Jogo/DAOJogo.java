@@ -1,8 +1,7 @@
 package Jogo;
 
-import Time.Time;
+import Server.ConexaoJavaDb;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -16,27 +15,17 @@ public class DAOJogo {
     private PreparedStatement stmR;
     private PreparedStatement stmU;
     private PreparedStatement stmD;
-
-    private Connection conn;
-
-    public DAOJogo() {
+    
+    @SuppressWarnings("CallToPrintStackTrace")
+    public DAOJogo(ConexaoJavaDb conexao) {
         try {
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
-            this.conn = DriverManager.getConnection("jdbc:derby://localhost:1527/bancotimejogo", "app", "app");
-            this.stmC = this.conn.prepareStatement("INSERT INTO JOGOS (TIMEA, TIMEB, GOLSA, GOLSB) VALUES (?,?,?,?)",
+            Connection conn = conexao.getConexao();
+            this.stmC = conn.prepareStatement("INSERT INTO JOGOS (TIMEA, TIMEB, GOLSA, GOLSB) VALUES (?,?,?,?)",
                     Statement.RETURN_GENERATED_KEYS);
-            this.stmRALL = this.conn.prepareStatement("SELECT * FROM JOGOS");
-            this.stmR = this.conn.prepareStatement("SELECT * FROM JOGOS WHERE ID=?");
-            this.stmU = this.conn.prepareStatement("UPDATE JOGOS SET TIMEA = ?, TIMEB = ?, GOLSA = ?, GOLSB = ? WHERE ID = ?");
-            this.stmD = this.conn.prepareStatement("DELETE FROM JOGOS WHERE ID=?");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void close() {
-        try {
-            this.conn.close();
+            this.stmRALL = conn.prepareStatement("SELECT * FROM JOGOS");
+            this.stmR = conn.prepareStatement("SELECT * FROM JOGOS WHERE ID=?");
+            this.stmU = conn.prepareStatement("UPDATE JOGOS SET TIMEA = ?, TIMEB = ?, GOLSA = ?, GOLSB = ? WHERE ID = ?");
+            this.stmD = conn.prepareStatement("DELETE FROM JOGOS WHERE ID=?");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -114,21 +103,20 @@ public class DAOJogo {
         return null;
     }
 
-    public Jogo update(int id, Jogo jogo) {
+    public boolean update(Jogo jogo) {
         try {
-            jogo.setId(id);
             this.stmU.setInt(1, jogo.getTimea());
             this.stmU.setInt(2, jogo.getTimeb());
             this.stmU.setInt(3, jogo.getGolsa());
             this.stmU.setInt(4, jogo.getGolsb());
-            this.stmU.setInt(5, id);
+            this.stmU.setInt(5, jogo.getId());
             int i = this.stmU.executeUpdate();
             if (i > 0) {
-                return jogo;
+                return true;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return false;
     }
 }

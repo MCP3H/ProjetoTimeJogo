@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Times (read)</title>
+	<meta charset="UTF-8">
+</head>
+<body>
+	<p><a href="/site">&lt; Voltar para página inicial</a></p>
+	<h1>Times</h1>
+	<p style="font-weight:bold" id="contador"></p>
+	<table>
+	<tr>
+		<th>ID</th>
+		<th>Nome</th>
+		<th>Ano</th>
+		<th>Cidade</th>
+		<th>Estado</th>
+	</tr>
+	<tbody id="times">
+	</tbody>
+	</table>
+	<script>
+		const corpoTabela = document.querySelector('#times');
+		const contadorParagraph = document.querySelector('#contador');
+		
+		function preencherTabela(times) {
+			var linhasTabela = '';
+			var n = times.length;
+			for (var i = 0; i < n; i++) {
+			var time = times[i];
+			linhasTabela += '<tr>'+
+				'<td>' + time.id + '</td>' + 
+				'<td>' + time.nome + '</td>' + 
+				'<td>' + time.ano + '</td>' + 
+				'<td>' + time.cidade+ '</td>' + 
+				'<td>' + time.estado + '</td>'+
+			'</tr>\n';
+			}
+			corpoTabela.innerHTML = linhasTabela;
+			contadorParagraph.innerHTML = n + ' ' + (n==1?'time':'times');
+		}
+		
+		async function listarTodosTimes() {
+			const URL = '/api/times';
+			try {
+				fetch(URL).then(resposta => resposta.json()).then(jsonResponse => preencherTabela(jsonResponse));
+			} catch (e) {
+				corpoTabela.innerHTML = e;
+			}
+		}
+		
+		listarTodosTimes();
+	</script>
+</body>
+</html>

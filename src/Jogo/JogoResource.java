@@ -1,9 +1,7 @@
 package Jogo;
 
-import Time.Time;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import io.dropwizard.jersey.*;
 import io.dropwizard.jersey.params.*;
 import java.util.*;
 
@@ -69,9 +67,13 @@ public class JogoResource {
 
     @PUT
     @Path("/{id}")
-    public Jogo update(@PathParam("id") IntParam id, Jogo j) {
-        Jogo jogo = new Jogo(j.getTimea(),j.getTimeb(),j.getGolsa(),j.getGolsb());
-        return this.daojogo.update(id.get(), jogo);
+    public Response update(@PathParam("id") IntParam id, Jogo j) {
+        j.setId(id.get());
+        if (this.daojogo.update(j)) {
+            return Response.ok().build();
+        } else {
+            throw new WebApplicationException("Jogo com id = " + id.get() + " não encontrado!", 404);
+        }
     }
 //fetch('http://localhost:8080/jogos/9', {
 //method: 'PUT',

@@ -1,0 +1,107 @@
+@font-face {
+    font-family: UbuntuRegular;
+    src: url('../fonts/Ubuntu-Regular.ttf');
+}
+
+a:link{ 
+	text-decoration:none; 
+}
+
+.fundo-titulo{
+	background-image: url("../img/bg.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-color: rgb(0, 30, 0);
+	height: 500px;
+}
+.titulo{
+	padding: 30px 5px; 
+	margin-top: 180px;
+	background-color: rgb(0,0,0,0.6);
+	text-align: center;
+	color: white;
+	font-family: UbuntuRegular;
+	display: none;
+	cursor: pointer;
+}
+
+/* menu */
+.time, .jogo{
+	padding: 40px 0px 40px 40px;
+	margin: 10px 0px; 
+	background-color: white;
+	color: rgb(0, 30, 0);
+	cursor: pointer;
+}
+
+.time:hover, .jogo:hover{
+	background-color: rgb(0, 30, 0);
+	color: white;
+}
+
+/* rodape */
+.rodape{
+	background-color: rgb(0, 30, 0);
+	text-align: center;
+	color: white;
+	padding: 10px;
+}
+
+/* página de jogos */
+.titulo-jogos{
+	font-size: 28px;
+	background-color: rgb(0, 30, 0);
+	text-align: center;
+	color: white;
+	padding: 20px;
+}
+.menu-jogos{
+	margin: 20px 0px;
+}
+.get-jogos, .put-jogos, .post-jogos, .delete-jogos{
+	padding: 10px;
+	font-size: 20px;
+	color: rgb(0, 30, 0);
+	background-color: white;
+	text-align: center;
+	cursor: pointer;
+}
+
+.get-jogos:hover, .put-jogos:hover, .post-jogos:hover, .delete-jogos:hover{
+	color: white;
+	background-color: rgb(0, 30, 0);
+}
+
+/* página de times */
+.titulo-times{
+	font-size: 28px;
+	background-color: rgb(0, 30, 0);
+	text-align: center;
+	color: white;
+	padding: 20px;
+}
+.menu-times{
+	margin: 20px 0px;
+}
+.get-times, .put-times, .post-times, .delete-times{
+	padding: 10px;
+	font-size: 20px;
+	color: rgb(0, 30, 0);
+	background-color: white;
+	text-align: center;
+	cursor: pointer;
+}
+
+.get-times:hover, .put-times:hover, .post-times:hover, .delete-times:hover{
+	color: white;
+	background-color: rgb(0, 30, 0);
+}
+
+/* formularios */
+.formularios{
+	margin: 10px 0px 10px 0px; 
+}
+.formulario-get, .formulario-post, .formulario-put, .formulario-delete{
+	display: none;
+	margin: 10px 0px 20px 0px;
+}

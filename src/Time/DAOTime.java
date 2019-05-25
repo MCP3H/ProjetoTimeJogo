@@ -1,9 +1,7 @@
 package Time;
 
-import Jogo.Jogo;
-import Time.Time;
+import Server.ConexaoJavaDb;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -17,27 +15,18 @@ public class DAOTime {
     private PreparedStatement stmR;
     private PreparedStatement stmU;
     private PreparedStatement stmD;
-
-    private Connection conn;
-
-    public DAOTime() {
+    
+    
+    @SuppressWarnings("CallToPrintStackTrace")
+    public DAOTime(ConexaoJavaDb conexao) {
         try {
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
-            this.conn = DriverManager.getConnection("jdbc:derby://localhost:1527/bancotimejogo", "app", "app");
-            this.stmC = this.conn.prepareStatement("INSERT INTO TIMES (NOME, ANO, CIDADE, ESTADO) VALUES (?,?,?,?)",
+            Connection conn = conexao.getConexao();
+            this.stmC = conn.prepareStatement("INSERT INTO TIMES (NOME, ANO, CIDADE, ESTADO) VALUES (?,?,?,?)",
                     Statement.RETURN_GENERATED_KEYS);
-            this.stmRALL = this.conn.prepareStatement("SELECT * FROM TIMES");
-            this.stmR = this.conn.prepareStatement("SELECT * FROM TIMES WHERE ID=?");
-            this.stmU = this.conn.prepareStatement("UPDATE TIMES SET NOME = ?, ANO = ?, CIDADE = ?, ESTADO = ? WHERE ID = ?");
-            this.stmD = this.conn.prepareStatement("DELETE FROM TIMES WHERE ID=?");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void close() {
-        try {
-            this.conn.close();
+            this.stmRALL = conn.prepareStatement("SELECT * FROM TIMES");
+            this.stmR = conn.prepareStatement("SELECT * FROM TIMES WHERE ID=?");
+            this.stmU = conn.prepareStatement("UPDATE TIMES SET NOME = ?, ANO = ?, CIDADE = ?, ESTADO = ? WHERE ID = ?");
+            this.stmD = conn.prepareStatement("DELETE FROM TIMES WHERE ID=?");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -115,22 +104,21 @@ public class DAOTime {
         return null;
     }
 
-    public Time update(int id, Time time) {
+    public boolean update(Time time) {
         try {
-            time.setId(id);
             this.stmU.setString(1, time.getNome());
             this.stmU.setInt(2, time.getAno());
             this.stmU.setString(3, time.getCidade());
             this.stmU.setString(4, time.getEstado());
-            this.stmU.setInt(5, id);
+            this.stmU.setInt(5, time.getId());
             int i = this.stmU.executeUpdate();
             if (i>0){
-                return time;
+                return true;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return false;
     }
 
 }

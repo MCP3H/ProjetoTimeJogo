@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset = "UTF-8">
+	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+	<title> Jogos </title>
+	<link rel="stylesheet" type="text/css" href="css/index.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<script src="js/jquery.js"></script>
+  	<script src="js/jquery-ui.js"></script>
+</head>
+<body onload="abrirFormGet()">
+	<!-- titulo do site -->
+	<div class="container-fluid">
+		<div class="row fundo-titulo" onclick="location.href='index.html'">
+			<div class="col col-titulo">
+				<div id="titulo" class="titulo">
+					<h1> Campeonato Tico and Teco Corporation </h1>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col titulo-jogos">
+				Informações sobre os <strong>Jogos</strong> do Campeonato Tico and Teco Corporation
+			</div>
+		</div>
+		<div class="row menu-jogos">
+			<div class="col-sm-3">
+				<div id="getJogos" class="get-jogos" onclick="abrirFormGet()">
+					Visualizar Jogos
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div id="postJogos" class="post-jogos" onclick="abrirFormPost()">
+					Adicionar Jogo
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div id="putJogos" class="put-jogos" disabled> 
+					Atualizar Jogo
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div id="index" class="put-jogos" onclick="location.href='index.html'"> 
+					Voltar Menu
+				</div>
+			</div>
+		</div>
+		<div class="row formularios">
+			<div class="col">
+				<div id="formGet" class="formulario-get">
+					<form>
+						<div class="form-group">
+							<input type="text" class="form-control" id="idJogoGet" placeholder="Insira o id do jogo para visualizar" onkeypress='return SomenteNumero(event)'>
+							<input type="button" class="btn btn-success" onclick="getJogo()" value="Visualizar" />
+						</div>
+						
+						<hr>
+						<form>
+							<div class="form-group">
+								<table style="border:1px solid">
+									<tr>
+										<th>ID</th>
+										<th>Time A</th>
+										<th>Gols A</th>
+										<th>Gols B</th>
+										<th>Time B</th>
+										<th></th>
+										<th></th>
+									</tr>
+									<tbody id="jogos">
+									</tbody>
+								</table>
+							</div>
+						</form>
+					</form>
+				</div>
+				<div id="formPut" class="formulario-put">
+					<form>
+						<div class="form-group">
+							Time A: 
+							<select id="timeACombo">
+							</select>
+						</div>
+						<div class="form-group">
+							Time B: 
+							<select id="timeBCombo">
+							</select>
+						</div>
+						<div class="form-group">
+							Gols A
+							<input type="text" class="form-control" id="golsA" onkeypress='return SomenteNumero(event)'>
+						</div>
+						<div class="form-group">
+							Gols B
+							<input type="text" class="form-control" id="golsB" onkeypress='return SomenteNumero(event)'>
+						</div>
+						<input type="button" class="btn btn-success" onclick="atualizar()" value="Atualizar" />
+						<input type="reset" class="btn btn-success" onclick="limparCampos()" value="Cancelar" />
+					</form>
+				</div>
+				<div id="formPost" class="formulario-post">
+					<form>
+						<div class="form-group">
+							Time A: 
+							<select id="timeAComboAdd">
+							</select>
+						</div>
+						<div class="form-group">
+							Time B: 
+							<select id="timeBComboAdd">
+							</select>
+						</div>
+						<div class="form-group">
+							Gols A
+							<input type="text" class="form-control" id="golsAAdd" onkeypress='return SomenteNumero(event)'>
+						</div>
+						<div class="form-group">
+							Gols B
+							<input type="text" class="form-control" id="golsBAdd" onkeypress='return SomenteNumero(event)'>
+						</div>
+						<input type="button" class="btn btn-success" onclick="adicionar()" value="Adicionar" />
+						<input type="reset" class="btn btn-success" onclick="limparCampos()" value="Cancelar" />
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col rodape">
+				Copyright © 2019 Campeonato Tico and Teco Corporation - Todos os direitos reservados. Criado e desenvolvido por TICO and TECO
+			</div>
+		</div>
+	</div>
+	<!-- menu do site -->
+</body>
+<script type="text/javascript">
+    abrirTitulo();
+	var corpoTabela = document.querySelector('#jogos');
+	var timeACombo = document.querySelector('#timeACombo');
+	var timeBCombo = document.querySelector('#timeBCombo');
+	var timeAComboAdd = document.querySelector('#timeAComboAdd');
+	var timeBComboAdd = document.querySelector('#timeBComboAdd');
+	var idTimeAJogo;
+	var idTimeBJogo;
+	var timeAJogo; 
+	var timeBJogo; 
+	var golsAJogo = document.querySelector('#golsA');
+	var golsBJogo = document.querySelector('#golsB');
+	var golsAJogoAdd = document.querySelector('#golsAAdd');
+	var golsBJogoAdd = document.querySelector('#golsBAdd');
+	var url;
+	var idJogoGet = document.querySelector('#idJogoGet');
+	
+	function SomenteNumero(e){
+		var tecla=(window.event)?event.keyCode:e.which;   
+		if((tecla>47 && tecla<58)) return true;
+		else{
+			if (tecla==8 || tecla==0) return true;
+			else  return false;
+		}
+	}
+	
+	function limparCampos(){
+		golsAJogo.value = '';
+		golsBJogo.value = '';
+		golsAJogoAdd.value = '';
+		golsBJogoAdd.value = '';
+		abrirFormGet();
+	}
+	
+	function getJogo(){
+		if (idJogoGet != null)
+			inicializar(idJogoGet.value);
+	}
+	
+	function atualizar(){
+		const ID = idJogo;
+		URL = `/api/jogos/${ID}`;
+		const dadosJogo = {
+			'timea': timeACombo.value,
+			'timeb': timeBCombo.value,
+			'golsa': golsAJogo.value,
+			'golsb': golsBJogo.value
+		};
+		const putRequest = {
+			method:'PUT',
+			body: JSON.stringify(dadosJogo),
+			headers: { 'Content-type': 'application/json;charset=UTF-8' }
+		};
+		try {
+			listarJogos(URL, putRequest);
+		} catch (e) {
+			corpoTabela.innerHTML = e;
+		}
+	}
+	
+	function adicionar(){
+		URL = `/api/jogos`;
+		const dadosJogo = {
+			'timea': timeAComboAdd.value,
+			'timeb': timeBComboAdd.value,
+			'golsa': golsAJogoAdd.value,
+			'golsb': golsBJogoAdd.value
+		};
+		const putRequest = {
+			method:'POST',
+			body: JSON.stringify(dadosJogo),
+			headers: { 'Content-type': 'application/json;charset=UTF-8' }
+		};
+		try {
+			listarJogos(URL, putRequest);
+		} catch (e) {
+			corpoTabela.innerHTML = e;
+		}
+	}
+	
+	function deletar(id){
+		if (confirm("Você deseja deletar este time?")) {
+			URL = `/api/jogos/${id}`;
+			const putRequest = {
+				method:'DELETE'
+			};
+			try {
+				listarJogos(URL, putRequest);
+			} catch (e) {
+				corpoTabela.innerHTML = e;
+			}
+		}
+	}
+    
+	function preencherTimes (timea,timeb){
+		url = `/api/times`;
+		try {
+			fetch(url).then(resposta => resposta.json()).then(jsonResponse => preencherCombo(jsonResponse,timea,timeb));
+		} catch (e) {
+			corpoTabela.innerHTML = e;			
+		}
+	}
+	
+	function idTimeA(id){
+		idTimeAJogo = id;
+	}
+	
+	function idTimeB(id){
+		idTimeBJogo = id;
+	}
+	
+	function preencherCombo(times,timea,timeb){
+		var linhasCombo = '';
+        var n = times.length;
+		for (var i = 0; i < n; i++) {
+            var time = times[i];
+			debugger
+			if (time.id == timea)
+				linhasCombo += `<option id="timeA" value="${time.id}" selected>${time.nome}</option>`;
+			else
+				linhasCombo += `<option id="timeA" value="${time.id}" >${time.nome}</option>`;
+		}
+		timeACombo.innerHTML = linhasCombo;
+		timeAComboAdd.innerHTML = linhasCombo;
+		linhasCombo = '';
+		for (var j = 0; j < n; j++) {
+            var time = times[j];
+			if (time.id == timeb)
+				linhasCombo += `<option id="timeB" value="${time.id}" selected>${time.nome}</option>`;
+			else
+				linhasCombo += `<option id="timeB" value="${time.id}" >${time.nome}</option>`;
+		}
+		timeBCombo.innerHTML = linhasCombo;
+		timeBComboAdd.innerHTML = linhasCombo;
+	}
+	
+	function preencherTabela(jogos, times) {
+		var linhasTabela = '';
+        var n = jogos.length;
+		if (n == null){
+			var tan;
+			for (var ta in times){
+				if (jogos.timea == times[ta].id)
+					tan = times[ta].nome;
+			}
+			var tbn;
+			for (var tb in times){
+				if (jogos.timeb == times[tb].id)
+					tbn = times[tb].nome;
+			}
+			linhasTabela += '<tr>'+
+			'<td>' + jogos.id + '</td>' + 
+			'<td>' + tan + '</td>' + 
+			'<td>' + jogos.golsa + '</td>' + 
+			'<td>' + jogos.golsb+ '</td>' + 
+			'<td>' + tbn + '</td>'+
+			'<td>' + `<i onclick="abrirFormPut('${jogos.id}','${jogos.timea}','${jogos.golsa}','${jogos.golsb}','${jogos.timeb}')" class="fas fa-edit"></i></td>`+
+			'<td>' + `<i onclick="deletar('${jogos.id}')" class="fas fa-trash-alt"></i></td>` +
+                    '</tr>\n';
+		}else{
+			for (var i = 0; i < n; i++) {
+                var jogo = jogos[i];
+				var tan;
+				for (var ta in times){
+					if (jogo.timea == times[ta].id)
+						tan = times[ta].nome;
+				}
+				var tbn;
+				for (var tb in times){
+					if (jogo.timeb == times[tb].id)
+						tbn = times[tb].nome;
+				}
+                linhasTabela += '<tr>'+
+			'<td>' + jogo.id + '</td>' + 
+			'<td>' + tan + '</td>' + 
+			'<td>' + jogo.golsa + '</td>' + 
+			'<td>' + jogo.golsb + '</td>' + 
+			'<td>' + tbn + '</td>'+
+			'<td>' + `<i onclick="abrirFormPut('${jogo.id}','${jogo.timea}','${jogo.golsa}','${jogo.golsb}','${jogo.timeb}')" class="fas fa-edit"></i></td>`+
+			'<td>' + `<i onclick="deletar('${jogo.id}')" class="fas fa-trash-alt"></i></td>` +
+                    '</tr>\n';
+                }
+		}
+		corpoTabela.innerHTML = linhasTabela;
+	}      
+	
+	async function listarJogos(url, request) {
+		try {
+			if(request != null){
+				if(request.method){
+					fetch(url, request).then(resposta => abrirFormGet());
+				}
+			}else{
+				fetch(url).then(resposta => resposta.json()).then(function(jsonResponse){
+					if (jsonResponse.code == 400)
+						inicializar();
+					if (Array.isArray(jsonResponse)){
+						var jogos = jsonResponse;
+						url = `/api/times`;
+						fetch(url).then(resposta => resposta.json()).then(jsonResponse => preencherTabela(jogos, jsonResponse));
+					}else
+						if (jsonResponse.id != 0){
+							var jogos = jsonResponse;
+							url = `/api/times`;
+							fetch(url).then(resposta => resposta.json()).then(jsonResponse => preencherTabela(jogos, jsonResponse));
+						}else
+							inicializar();
+				});
+			}
+		} catch (e) {
+			corpoTabela.innerHTML = e;			
+		}
+	}
+	
+	function inicializar(valor){
+		if(valor == null){
+			url = `/api/jogos`;
+		}else{
+			url = `/api/jogos/${valor}`;
+		}
+		listarJogos(url);
+	}
+	
+	function abrirFormGet(){
+		$( "#formPut" ).hide("fade", 10);
+		$( "#formPost" ).hide("fade", 10);
+		$( "#formGetTime" ).hide("fade",10);
+
+		$( "#putTimes" ).css("background-color", "white");  
+		$( "#putTimes" ).css({'color': 'rgb(0, 30, 0)'});   
+
+		$( "#postTimes" ).css("background-color", "white");  
+		$( "#postTimes" ).css({'color': 'rgb(0, 30, 0)'});
+		
+		$( "#getTimes" ).css("background-color", "rgb(0, 30, 0)");  
+		$( "#getTimes" ).css({'color': 'white'});
+
+		$( "#formGet" ).show("fade", 800);	
+		inicializar();		
+	}
+	
+	function abrirFormPut(id,timeA,golsA,golsB,timeB){
+		preencherTimes(timeA,timeB);
+		idJogo = id;
+		golsAJogo.value =  golsA;
+		golsBJogo.value = golsB;
+		
+		$( "#formGet" ).hide("fade", 10);
+		$( "#formPost" ).hide("fade", 10);
+
+		$( "#getTimes" ).css("background-color", "white");  
+		$( "#getTimes" ).css({'color': 'rgb(0, 30, 0)'});		
+
+		$( "#postTimes" ).css("background-color", "white");  
+		$( "#postTimes" ).css({'color': 'rgb(0, 30, 0)'});
+
+		$( "#putTimes" ).css("background-color", "rgb(0, 30, 0)");  
+		$( "#putTimes" ).css({'color': 'white'});  
+
+		$( "#formPut" ).show("fade", 800);
+	}
+
+	function abrirFormPost(){
+		preencherTimes();
+		$( "#formGet" ).hide("fade", 10);
+		$( "#formPut" ).hide("fade", 10);
+		
+		$( "#putTimes" ).css("background-color", "white");  
+		$( "#putTimes" ).css({'color': 'rgb(0, 30, 0)'});
+
+		$( "#postTimes" ).css("background-color", "rgb(0, 30, 0)");  
+		$( "#postTimes" ).css({'color': 'white'});   
+		
+		$( "#getTimes" ).css("background-color", "white");  
+		$( "#getTimes" ).css({'color': 'rgb(0, 30, 0)'});	
+
+		$( "#formPost" ).show("fade", 800);
+	}
+	
+	function abrirTitulo(){
+		$( "#titulo" ).delay(500).show("fade", 1000);
+	}
+</script>
+</html>
