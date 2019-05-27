@@ -5,10 +5,10 @@
 	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
 	<title> Jogos </title>
 	<link rel="stylesheet" type="text/css" href="css/index.css">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+	<script src="js/popper.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
 	<script src="js/jquery.js"></script>
   	<script src="js/jquery-ui.js"></script>
 </head>
@@ -55,24 +55,27 @@
 					<form>
 						<div class="form-group">
 							<input type="text" class="form-control" id="idJogoGet" placeholder="Insira o id do jogo para visualizar" onkeypress='return SomenteNumero(event)'>
-							<input type="button" class="btn btn-success" onclick="getJogo()" value="Visualizar" />
+							<input type="button" class="btn btn-success btn-visualizar" onclick="getJogo()" value="Visualizar" />
 						</div>
 						
 						<hr>
 						<form>
 							<div class="form-group">
-								<table style="border:1px solid">
+								<table class="table table-bordered">
+                                                                    <thead>
 									<tr>
-										<th>ID</th>
-										<th>Time A</th>
-										<th>Gols A</th>
-										<th>Gols B</th>
-										<th>Time B</th>
-										<th></th>
-										<th></th>
+                                                                            <th scope="col">ID</th>
+                                                                            <th scope="col">Time A</th>
+                                                                            <th scope="col">Gols A</th>
+                                                                            <th scope="col">Gols B</th>
+                                                                            <th scope="col">Time B</th>
+                                                                            <th scope="col">Editar</th>
+                                                                            <th scope="col">Excluir</th>
 									</tr>
-									<tbody id="jogos">
-									</tbody>
+                                                                    </thead>
+                                                                    <tbody id="jogos">
+                                                                        
+                                                                    </tbody>
 								</table>
 							</div>
 						</form>
@@ -177,6 +180,9 @@
 	}
 	
 	function atualizar(){
+            if( $( "#golsA" ).val().length < 1 || $( "#golsB" ).val().length < 1){
+                alert("Campo vazio");
+            }else{
 		const ID = idJogo;
 		URL = `/api/jogos/${ID}`;
 		const dadosJogo = {
@@ -195,9 +201,13 @@
 		} catch (e) {
 			corpoTabela.innerHTML = e;
 		}
+            }
 	}
 	
 	function adicionar(){
+            if( $( "#golsAAdd" ).val().length < 1 || $( "#golsBAdd" ).val().length < 1){
+                alert("Campo não preenchido");
+            }else{
 		URL = `/api/jogos`;
 		const dadosJogo = {
 			'timea': timeAComboAdd.value,
@@ -212,9 +222,12 @@
 		};
 		try {
 			listarJogos(URL, putRequest);
+                        $( "#golsAAdd" ).val("");
+                        $( "#golsBAdd" ).val("");
 		} catch (e) {
 			corpoTabela.innerHTML = e;
 		}
+            }
 	}
 	
 	function deletar(id){
@@ -293,8 +306,8 @@
 			'<td>' + jogos.golsa + '</td>' + 
 			'<td>' + jogos.golsb+ '</td>' + 
 			'<td>' + tbn + '</td>'+
-			'<td>' + `<i onclick="abrirFormPut('${jogos.id}','${jogos.timea}','${jogos.golsa}','${jogos.golsb}','${jogos.timeb}')" class="fas fa-edit"></i></td>`+
-			'<td>' + `<i onclick="deletar('${jogos.id}')" class="fas fa-trash-alt"></i></td>` +
+			'<td class="pointer">' + `<div class="editar-excluir" onclick="abrirFormPut('${jogos.id}','${jogos.timea}','${jogos.golsa}','${jogos.golsb}','${jogos.timeb}')"><i class="fas fa-edit"></i></td>`+
+			'<td class="pointer">' + `<div class="editar-excluir" onclick="deletar('${jogos.id}')"><i class="fas fa-trash-alt"></i></td>` +
                     '</tr>\n';
 		}else{
 			for (var i = 0; i < n; i++) {
@@ -315,8 +328,8 @@
 			'<td>' + jogo.golsa + '</td>' + 
 			'<td>' + jogo.golsb + '</td>' + 
 			'<td>' + tbn + '</td>'+
-			'<td>' + `<i onclick="abrirFormPut('${jogo.id}','${jogo.timea}','${jogo.golsa}','${jogo.golsb}','${jogo.timeb}')" class="fas fa-edit"></i></td>`+
-			'<td>' + `<i onclick="deletar('${jogo.id}')" class="fas fa-trash-alt"></i></td>` +
+			'<td class="pointer">' + `<div class="editar-excluir" onclick="abrirFormPut('${jogo.id}','${jogo.timea}','${jogo.golsa}','${jogo.golsb}','${jogo.timeb}')"><i class="fas fa-edit"></i></td>`+
+			'<td class="pointer">' + `<div class="editar-excluir" onclick="deletar('${jogo.id}')"><i class="fas fa-trash-alt"></i></td>` +
                     '</tr>\n';
                 }
 		}
@@ -365,14 +378,14 @@
 		$( "#formPost" ).hide("fade", 10);
 		$( "#formGetTime" ).hide("fade",10);
 
-		$( "#putTimes" ).css("background-color", "white");  
-		$( "#putTimes" ).css({'color': 'rgb(0, 30, 0)'});   
+		$( "#putJogos" ).css("background-color", "white");  
+		$( "#putJogos" ).css({'color': 'rgb(0, 30, 0)'});   
 
-		$( "#postTimes" ).css("background-color", "white");  
-		$( "#postTimes" ).css({'color': 'rgb(0, 30, 0)'});
+		$( "#postJogos" ).css("background-color", "white");  
+		$( "#postJogos" ).css({'color': 'rgb(0, 30, 0)'});
 		
-		$( "#getTimes" ).css("background-color", "rgb(0, 30, 0)");  
-		$( "#getTimes" ).css({'color': 'white'});
+		$( "#getJogos" ).css("background-color", "rgb(0, 30, 0)");  
+		$( "#getJogos" ).css({'color': 'white'});
 
 		$( "#formGet" ).show("fade", 800);	
 		inicializar();		
@@ -387,14 +400,14 @@
 		$( "#formGet" ).hide("fade", 10);
 		$( "#formPost" ).hide("fade", 10);
 
-		$( "#getTimes" ).css("background-color", "white");  
-		$( "#getTimes" ).css({'color': 'rgb(0, 30, 0)'});		
+		$( "#getJogos" ).css("background-color", "white");  
+		$( "#getJogos" ).css({'color': 'rgb(0, 30, 0)'});		
 
-		$( "#postTimes" ).css("background-color", "white");  
-		$( "#postTimes" ).css({'color': 'rgb(0, 30, 0)'});
+		$( "#postJogos" ).css("background-color", "white");  
+		$( "#postJogos" ).css({'color': 'rgb(0, 30, 0)'});
 
-		$( "#putTimes" ).css("background-color", "rgb(0, 30, 0)");  
-		$( "#putTimes" ).css({'color': 'white'});  
+		$( "#putJogos" ).css("background-color", "rgb(0, 30, 0)");  
+		$( "#putJogos" ).css({'color': 'white'});  
 
 		$( "#formPut" ).show("fade", 800);
 	}
@@ -404,14 +417,14 @@
 		$( "#formGet" ).hide("fade", 10);
 		$( "#formPut" ).hide("fade", 10);
 		
-		$( "#putTimes" ).css("background-color", "white");  
-		$( "#putTimes" ).css({'color': 'rgb(0, 30, 0)'});
+		$( "#putJogos" ).css("background-color", "white");  
+		$( "#putJogos" ).css({'color': 'rgb(0, 30, 0)'});
 
-		$( "#postTimes" ).css("background-color", "rgb(0, 30, 0)");  
-		$( "#postTimes" ).css({'color': 'white'});   
+		$( "#postJogos" ).css("background-color", "rgb(0, 30, 0)");  
+		$( "#postJogos" ).css({'color': 'white'});   
 		
-		$( "#getTimes" ).css("background-color", "white");  
-		$( "#getTimes" ).css({'color': 'rgb(0, 30, 0)'});	
+		$( "#getJogos" ).css("background-color", "white");  
+		$( "#getJogos" ).css({'color': 'rgb(0, 30, 0)'});	
 
 		$( "#formPost" ).show("fade", 800);
 	}

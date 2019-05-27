@@ -5,15 +5,15 @@
 	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
 	<title> Times </title>
 	<link rel="stylesheet" type="text/css" href="css/index.css">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+	<script src="js/popper.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
 	<script src="js/jquery.js"></script>
   	<script src="js/jquery-ui.js"></script>
 </head>
 <body onload="abrirFormGet()">
-	<!-- titulo do site -->
+<!-- titulo do site -->
 	<div class="container-fluid">
 		<div class="row fundo-titulo" onclick="location.href='index.html'">
 			<div class="col col-titulo">
@@ -55,24 +55,27 @@
 					<form>
 						<div class="form-group">
 							<input type="text" class="form-control" id="idTimeGet" placeholder="Insira o id do time para visualizar" onkeypress='return SomenteNumero(event)'>
-							<input type="button" class="btn btn-success" onclick="getTime()" value="Visualizar" />
+							<input type="button" class="btn btn-success btn-visualizar" onclick="getTime()"  value="Visualizar" />
 						</div>
 						
 						<hr>
 						<form>
 							<div class="form-group">
-								<table style="border:1px solid">
+								<table class="table table-bordered">
+                                                                    <thead>
 									<tr>
-										<th>ID</th>
-										<th>Nome</th>
-										<th>Ano</th>
-										<th>Cidade</th>
-										<th>Estado</th>
-										<th></th>
-										<th></th>
+                                                                            <th scope="col">ID</th>
+                                                                            <th scope="col">Nome</th>
+                                                                            <th scope="col">Ano</th>
+                                                                            <th scope="col">Cidade</th>
+                                                                            <th scope="col">Estado</th>
+                                                                            <th scope="col">Editar</th>
+                                                                            <th scope="col">Excluir</th>
 									</tr>
-									<tbody id="times">
-									</tbody>
+                                                                    </thead>
+                                                                    <tbody id="times">
+                                                                        
+                                                                    </tbody>
 								</table>
 							</div>
 						</form>
@@ -86,7 +89,7 @@
 						</div>
 						<div class="form-group">
 							Ano
-							<input type="text" class="form-control" id="anoTimeAdd" onkeypress='return SomenteNumero(event)'>
+							<input type="text" maxLength="4" class="form-control" id="anoTimeAdd" onkeypress='return SomenteNumero(event)'>
 						</div>
 						<div class="form-group">
 							Cidade
@@ -96,7 +99,7 @@
 							Estado
 							<input type="text" class="form-control" id="estadoTimeAdd">
 						</div>
-						<input type="button" class="btn btn-success" onclick="adicionar()" value="Adicionar" />
+						<input type="button" id="submitAdicionar" class="btn btn-success" onclick="adicionar()" value="Adicionar"/>
 						<input type="reset" class="btn btn-success" onclick="limparCampos()" value="Cancelar" />
 					</form>
 				</div>
@@ -108,7 +111,7 @@
 						</div>
 						<div class="form-group">
 							Ano
-							<input type="text" class="form-control" id="anoTime" onkeypress='return SomenteNumero(event)'>
+							<input type="text" maxLength="4" class="form-control" id="anoTime" onkeypress='return SomenteNumero(event)'>
 						</div>
 						<div class="form-group">
 							Cidade
@@ -151,7 +154,7 @@
 			else  return false;
 		}
 	}
-	
+        
 	function limparCampos(){
 		nomeTime.value = '';
 		anoTime.value = '';
@@ -164,46 +167,58 @@
 		if (idTimeGet != null)
 			inicializar(idTimeGet.value);
 	}
-	
+        
 	function atualizar(){
-		const ID = idTime;
-		URL = `/api/times/${ID}`;
-		const dadosTime = {
-			'nome': nomeTime.value,
-			'ano': anoTime.value,
-			'cidade': cidadeTime.value,
-			'estado': estadoTime.value
-		};
-		const putRequest = {
-			method:'PUT',
-			body: JSON.stringify(dadosTime),
-			headers: { 'Content-type': 'application/json;charset=UTF-8' }
-		};
-		try {
-			listarTimes(URL, putRequest);
-		} catch (e) {
-			corpoTabela.innerHTML = e;
-		}
+                if( $( "#nomeTime" ).val().length < 1 || $( "#anoTime" ).val().length < 1 || $( "#cidadeTime" ).val().length < 1 || $( "#estadoTime" ).val().length < 1){
+                    alert("Campo vazio");
+                }else{
+                    const ID = idTime;
+                    URL = `/api/times/${ID}`;
+                    const dadosTime = {
+                            'nome': nomeTime.value,
+                            'ano': anoTime.value,
+                            'cidade': cidadeTime.value,
+                            'estado': estadoTime.value
+                    };
+                    const putRequest = {
+                            method:'PUT',
+                            body: JSON.stringify(dadosTime),
+                            headers: { 'Content-type': 'application/json;charset=UTF-8' }
+                    };
+                    try {
+                            listarTimes(URL, putRequest);
+                    } catch (e) {
+                            corpoTabela.innerHTML = e;
+                    }
+                }
 	}
 	
 	function adicionar(){
-		URL = `/api/times`;
-		const dadosTime = {
-			'nome': nomeTimeAdd.value,
-			'ano': anoTimeAdd.value,
-			'cidade': cidadeTimeAdd.value,
-			'estado': estadoTimeAdd.value
-		};
-		const putRequest = {
-			method:'POST',
-			body: JSON.stringify(dadosTime),
-			headers: { 'Content-type': 'application/json;charset=UTF-8' }
-		};
-		try {
-			listarTimes(URL, putRequest);
-		} catch (e) {
-			corpoTabela.innerHTML = e;
-		}
+                if( $( "#nomeTimeAdd" ).val().length < 1 || $( "#anoTimeAdd" ).val().length < 1 || $( "#cidadeTimeAdd" ).val().length < 1 || $( "#estadoTimeAdd" ).val().length < 1){
+                    alert("Campo não preenchido");
+                }else{
+                    URL = `/api/times`;
+                    const dadosTime = {
+                            'nome': nomeTimeAdd.value,
+                            'ano': anoTimeAdd.value,
+                            'cidade': cidadeTimeAdd.value,
+                            'estado': estadoTimeAdd.value
+                    };
+                    const putRequest = {
+                            method:'POST',
+                            body: JSON.stringify(dadosTime),
+                            headers: { 'Content-type': 'application/json;charset=UTF-8' }
+                    };
+                    try {
+                            listarTimes(URL, putRequest);
+                            $( "#nomeTimeAdd" ).val("");
+                            $( "#anoTimeAdd" ).val("");
+                            $( "#cidadeTimeAdd" ).val("");
+                            $( "#estadoTimeAdd" ).val("");
+                    } catch (e) {
+                            corpoTabela.innerHTML = e;
+                    }
+                }		
 	}
 	
 	function deletar(id){
@@ -213,9 +228,20 @@
 				method:'DELETE'
 			};
 			try {
-				listarTimes(URL, putRequest);
+                            fetch(`/api/jogos`).then(resposta => resposta.json()).then(function(jsonResponse){
+                                for (var i = 0; i < jsonResponse.length; i++) {
+                                    debugger
+                                    if(jsonResponse[i].timea == id || jsonResponse[i].timeb == id){
+                                        alert("Time não pode ser deletado, pelo fato de estar cadastrado em um Jogo!!");
+                                        URL = `/api/times`;
+                                        request = null;
+                                        break;
+                                    }
+                                }
+                            });
+                            listarTimes(URL, putRequest);
 			} catch (e) {
-				corpoTabela.innerHTML = e;
+                            corpoTabela.innerHTML = e;
 			}
 		}
 	}
@@ -230,8 +256,8 @@
 			'<td>' + times.ano + '</td>' + 
 			'<td>' + times.cidade+ '</td>' + 
 			'<td>' + times.estado + '</td>'+
-			'<td>' + `<i onclick="abrirFormPut('${times.id}','${times.nome}','${times.ano}','${times.cidade}','${times.estado}')" class="fas fa-edit"></i></td>`+
-			'<td>' + `<i onclick="deletar('${times.id}')" class="fas fa-trash-alt"></i></td>` +
+			'<td class="pointer">' + `<div class="editar-excluir" onclick="abrirFormPut('${times.id}','${times.nome}','${times.ano}','${times.cidade}','${times.estado}')"><i class="fas fa-edit"></i></td>`+
+			'<td class="pointer">' + `<div class="editar-excluir" onclick="deletar('${times.id}')"><i class="fas fa-trash-alt"></i></div></td>` +
 			
                     '</tr>\n';
 		}else{
@@ -243,8 +269,8 @@
 			'<td>' + time.ano + '</td>' + 
 			'<td>' + time.cidade + '</td>' + 
 			'<td>' + time.estado + '</td>'+
-			'<td>' + `<i onclick="abrirFormPut('${time.id}','${time.nome}','${time.ano}','${time.cidade}','${time.estado}')" class="fas fa-edit"></i></td>`+
-			'<td>' + `<i onclick="deletar('${time.id}')" class="fas fa-trash-alt"></i></td>` +
+			'<td class="pointer" >' + `<div class="editar-excluir" onclick="abrirFormPut('${time.id}','${time.nome}','${time.ano}','${time.cidade}','${time.estado}')"><i class="fas fa-edit"></i></td>`+
+			'<td class="pointer">' + `<div class="editar-excluir" onclick="deletar('${time.id}')"><i class="fas fa-trash-alt"></i></div></td>` +
                     '</tr>\n';
                 }
 		}
@@ -255,7 +281,7 @@
 		try {
 			if(request != null){
 				if(request.method){
-					fetch(url, request).then(resposta => abrirFormGet());
+                                    (fetch(url, request).then(resposta => abrirFormGet()));   
 				}
 			}else{
 				fetch(url).then(resposta => resposta.json()).then(function(jsonResponse){
